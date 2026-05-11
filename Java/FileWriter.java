@@ -11,22 +11,22 @@ public class FileWriter{
     public void fileWriter(){
         System.out.println("Введите имя файла: ");
         String filename = scanner.nextLine();
-        if(Files.exists(Paths.get(filename))){
-        if (examination.isValidPath(filename)) {
-            System.out.println("Введите текст: ");
-            String text = scanner.nextLine();
-            try {
-                Path path = Paths.get(filename);
-                Files.writeString(path, text, StandardCharsets.UTF_8);
-                System.out.println("Текст записан!");
-            } catch (IOException e) {
-                System.out.println("Ошибка!");
+        try {
+            if (Files.exists(Paths.get(filename))) {
+                if (examination.isValidPath(filename)) {
+                    System.out.println("Введите текст: ");
+                    String text = scanner.nextLine();
+                        Path path = Paths.get(filename);
+                        Files.writeString(path, text, StandardCharsets.UTF_8);
+                        System.out.println("Текст записан!");
+                } else {
+                    System.out.println("Неправильное имя файла");
+                }
+            } else {
+                System.out.println("Файла с таким именем не существует");
             }
-        } else {
-            System.out.println("Неправильное имя файла");
-        }
-        }else {
-            System.out.println("Файла с таким именем не существует");
+        } catch (IOException e) {
+            System.out.println("Ошибка! ");
         }
     }
 }
