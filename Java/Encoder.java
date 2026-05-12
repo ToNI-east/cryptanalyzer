@@ -5,6 +5,17 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Encoder {
+    private static final char[] ALPHABET_RU = {
+        'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й',
+        'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф',
+        'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я'
+    };
+    private static final char[] ALPHABET_EN = {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+            'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+            'w', 'x', 'y', 'z'
+    };
+
     public void encode(String fileName) {
         StringBuilder result = new StringBuilder();
         Scanner scanner = new Scanner(System.in);
@@ -14,8 +25,28 @@ public class Encoder {
                 System.out.println("Введите ключ: ");
                 int key = scanner.nextInt();
                 try {
+                    int ruSize = ALPHABET_RU.length;
+                    int enSize = ALPHABET_EN.length;
+                    key = key % 33;
+                    if (key < 0) key += 33;
                     for (char character : Files.readString(Paths.get(fileName), StandardCharsets.UTF_8).toCharArray()) {
-                        result.append((char) (character + key));
+                        char lowerC = Character.toLowerCase(character);
+                        boolean isUpper = Character.isUpperCase(character);
+                        int index = findIndex(ALPHABET_RU, lowerC);
+                        if (index != -1) {
+                            int newIndex = (index + key) % ruSize;
+                            char newChar = ALPHABET_RU[newIndex];
+                            result.append(isUpper ? Character.toUpperCase(newChar) : newChar);
+                            continue;
+                        }
+                        index = findIndex(ALPHABET_EN, lowerC);
+                        if (index != -1) {
+                            int newIndex = (index + key) % enSize;
+                            char newChar = ALPHABET_EN[newIndex];
+                            result.append(isUpper ? Character.toUpperCase(newChar) : newChar);
+                            continue;
+                        }
+                        result.append(character);
                     }
                     Files.writeString(Paths.get(fileName), result.toString());
                     System.out.println("Файл успешно зашифрован! ");
@@ -29,4 +60,13 @@ public class Encoder {
             System.out.println("Ошибка! Файла с таким именем не существует!");
         }
     }
+    private static int findIndex(char[] alphabet, char character) {
+        for (int i = 0; i < alphabet.length; i++) {
+            if (alphabet[i] == character) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }
