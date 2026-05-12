@@ -18,7 +18,11 @@ public void fileRead() {
             } catch (IOException e) {
                 System.out.println("Ошибка!");
             }
+        } else {
+            System.out.println("Ошибка! Имя файла содержит запрещённые символы!");
         }
+    } else {
+        System.out.println("Ошибка! Файла с таким именем не существует!");
     }
 }
 }
