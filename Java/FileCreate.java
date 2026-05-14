@@ -10,7 +10,7 @@ public class FileCreate {
     Examination examination = new Examination();
     public void fileCreate(){
         try {
-            String filename = scanner.nextLine();
+            String filename = scanner.nextLine().trim();
             if (examination.isValidPath(filename)) {
                 path = Paths.get(filename);
                 Files.createFile(path);
