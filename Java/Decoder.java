@@ -5,10 +5,10 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Decoder {
+    Scanner scanner = new Scanner(System.in);
+    Examination examination = new Examination();
+    StringBuilder result = new StringBuilder();
     public void decrypt(String fileName) {
-        Scanner scanner = new Scanner(System.in);
-        Examination examination = new Examination();
-        StringBuilder result = new StringBuilder();
         if (Files.exists(Paths.get(fileName))) {
             if (examination.isValidPath(fileName)) {
                 System.out.println("Введите ключ: ");

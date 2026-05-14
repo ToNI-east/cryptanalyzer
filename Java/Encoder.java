@@ -5,10 +5,10 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Encoder {
+    StringBuilder result = new StringBuilder();
+    Scanner scanner = new Scanner(System.in);
+    Examination examination = new Examination();
     public void encode(String fileName) {
-        StringBuilder result = new StringBuilder();
-        Scanner scanner = new Scanner(System.in);
-        Examination examination = new Examination();
         if (Files.exists(Paths.get(fileName))) {
             if (examination.isValidPath(fileName)) {
                 System.out.println("Введите ключ: ");
