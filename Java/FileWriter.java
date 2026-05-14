@@ -10,7 +10,7 @@ public class FileWriter{
     Examination examination = new Examination();
     public void fileWriter(){
         System.out.println("Введите имя файла: ");
-        String filename = scanner.nextLine();
+        String filename = scanner.nextLine().trim();
         try {
             if (Files.exists(Paths.get(filename))) {
                 if (examination.isValidPath(filename)) {

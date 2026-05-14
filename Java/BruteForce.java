@@ -5,11 +5,11 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class BruteForce {
+    Scanner scanner = new Scanner(System.in);
+    Examination examination = new Examination();
     public void bruteForce() {
-        Scanner scanner = new Scanner(System.in);
-        Examination examination = new Examination();
         System.out.println("Введите имя файла: ");
-        String fileName = scanner.nextLine();
+        String fileName = scanner.nextLine().trim();
         int key = 0;
         if (Files.exists(Paths.get(fileName))) {
             if (examination.isValidPath(fileName)) {

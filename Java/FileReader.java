@@ -9,7 +9,7 @@ public class FileReader {
     Examination examination = new Examination();
 public void fileRead() {
     System.out.println("Введите имя файла: ");
-    String filename = scanner.nextLine();
+    String filename = scanner.nextLine().trim();
     if(Files.exists(Paths.get(filename))) {
         if (examination.isValidPath(filename)) {
             try (Stream<String> stream = Files.lines(Paths.get(filename))) {
