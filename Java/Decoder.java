@@ -1,21 +1,46 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
-public class Decoder {
-    Scanner scanner = new Scanner(System.in);
+public class Decoder implements ActionListener {
+    private final JTextField textField;
+    int key;
+    public Decoder(JTextField textField) {
+        this.textField = textField;
+    }
     Examination examination = new Examination();
     StringBuilder result = new StringBuilder();
-    public void decrypt(String fileName) {
-        if (Files.exists(Paths.get(fileName))) {
-            if (examination.isValidPath(fileName)) {
-                System.out.println("Введите ключ: ");
-                int key = scanner.nextInt();
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String filename = textField.getText().trim();
+        if (!filename.toLowerCase().endsWith(".txt") &&
+                !filename.toLowerCase().endsWith(".text")) {
+            filename += ".txt";
+        }
+        if (Files.exists(Paths.get(filename))) {
+            if (examination.isValidPath(filename)) {
+                String keys = JOptionPane.showInputDialog(
+                        null,
+                        "Введите ключ: ",
+                        "Зашифровать файл",
+                        JOptionPane.PLAIN_MESSAGE
+                );
+                if (keys != null) {
+                    if (keys.matches("\\d+")) {
+                        key = Integer.parseInt(keys);
+                        JOptionPane.showMessageDialog(null, "Ключ принят: " + key);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ошибка! Вводить можно только цифры.", "Ошибка ввода", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
                 key = Math.abs(key) % 26;
                 try {
-                    for (char character : Files.readString(Paths.get(fileName), StandardCharsets.UTF_8).toCharArray()) {
+                    for (char character : Files.readString(Paths.get(filename), StandardCharsets.UTF_8).toCharArray()) {
                         if (Character.isUpperCase(character)) {
                             if (character >= 'A' && character <= 'Z') {
                                 result.append((char) ((character - 'A' - key + 26) % 26 + 'A'));
@@ -40,9 +65,9 @@ public class Decoder {
                             result.append(character);
                         }
                     }
-                    Files.writeString(Paths.get(fileName), result.toString());
+                    Files.writeString(Paths.get(filename), result.toString());
                     System.out.println("Файл успешно расшифрован! ");
-                } catch (IOException e) {
+                } catch (IOException e1) {
                     System.out.println("Ошибка!");
                 }
             } else {

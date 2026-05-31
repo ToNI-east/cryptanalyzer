@@ -1,22 +1,33 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
-public class BruteForce {
-    Scanner scanner = new Scanner(System.in);
+public class BruteForce implements ActionListener {
+    private final JTextField textField;
+
+    public BruteForce(JTextField textField) {
+        this.textField = textField;
+    }
+
     Examination examination = new Examination();
-    public void bruteForce() {
-        System.out.println("Введите имя файла: ");
-        String fileName = scanner.nextLine().trim();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String filename = textField.getText().trim();
+        if (!filename.toLowerCase().endsWith(".txt") &&
+                !filename.toLowerCase().endsWith(".text")) {
+            filename += ".txt";
+        }
         int key = 0;
-        if (Files.exists(Paths.get(fileName))) {
-            if (examination.isValidPath(fileName)) {
+        if (Files.exists(Paths.get(filename))) {
+            if (examination.isValidPath(filename)) {
                 for (int i = 0; i < 33; i++) {
                     StringBuilder result = new StringBuilder();
                     try {
-                        for (char character : Files.readString(Paths.get(fileName), StandardCharsets.UTF_8).toCharArray()) {
+                        for (char character : Files.readString(Paths.get(filename), StandardCharsets.UTF_8).toCharArray()) {
                             if (Character.isUpperCase(character)) {
                                 if (character >= 'A' && character <= 'Z') {
                                     result.append((char) ((character - 'A' - key + 26) % 26 + 'A'));
@@ -41,9 +52,9 @@ public class BruteForce {
                                 result.append(character);
                             }
                         }
-                        System.out.println(result);
+                        JOptionPane.showMessageDialog(null, result);
                         key++;
-                    } catch (IOException e) {
+                    } catch (IOException e1) {
                         System.out.println("Ошибка! ");
                     }
                 }
